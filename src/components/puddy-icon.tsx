@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -27,13 +27,16 @@ export function PuddyIcon({
   const [isShaking, setIsShaking] = useState(false);
   const { src, width, height } = sizeMap[size];
 
-  const handleClick = useCallback(() => {
+  useEffect(() => {
     if (!playAudio) return;
+    const audio = new Audio("/were-the-devils.mp3");
+    audio.preload = "auto";
+    audio.addEventListener("ended", () => setIsShaking(false));
+    audioRef.current = audio;
+  }, [playAudio]);
 
-    if (!audioRef.current) {
-      audioRef.current = new Audio("/were-the-devils.mp3");
-      audioRef.current.addEventListener("ended", () => setIsShaking(false));
-    }
+  const handleClick = useCallback(() => {
+    if (!playAudio || !audioRef.current) return;
 
     audioRef.current.currentTime = 0;
     setIsShaking(true);

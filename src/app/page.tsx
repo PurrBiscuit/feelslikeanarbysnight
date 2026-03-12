@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { PuddyIcon } from "@/components/puddy-icon";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ArbysMap } from "@/components/arbys-map";
@@ -22,24 +22,28 @@ export default function Home() {
   const mapRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  useEffect(() => {
+    const audio = new Audio("/puddy-audio.mp3");
+    audio.preload = "auto";
+    audioRef.current = audio;
+  }, []);
+
   const playAudio = useCallback(() => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio("/puddy-audio.mp3");
-    }
+    if (!audioRef.current) return;
     audioRef.current.currentTime = 0;
     audioRef.current.play().catch(() => {});
   }, []);
 
   const handleSelectLocation = useCallback((id: string | null) => {
+    if (id) playAudio();
     setCenterOnSelect(false);
     setSelectedLocationId(id);
-    if (id) playAudio();
   }, [playAudio]);
 
   const handleCardSelect = useCallback((id: string) => {
+    playAudio();
     setCenterOnSelect(true);
     setSelectedLocationId(id);
-    playAudio();
     if (mapRef.current) {
       mapRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
