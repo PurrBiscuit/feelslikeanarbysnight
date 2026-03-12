@@ -51,7 +51,7 @@ export function LocationCard({ location, userLocation, index }: LocationCardProp
           </p>
           {location.hours && location.hours.length > 0 && (
             <p className="text-text-secondary text-xs mt-0.5 truncate max-w-[250px]">
-              {location.hours[new Date().getDay()]}
+              {location.hours[(new Date().getDay() + 6) % 7]}
             </p>
           )}
           {location.address && (

@@ -5,6 +5,14 @@ const MAX_REQUESTS = 60;
 
 export function rateLimit(ip: string): { allowed: boolean; remaining: number } {
   const now = Date.now();
+
+  // Prune expired entries to prevent unbounded memory growth
+  if (rateMap.size > 10_000) {
+    for (const [key, val] of rateMap) {
+      if (now > val.resetTime) rateMap.delete(key);
+    }
+  }
+
   const entry = rateMap.get(ip);
 
   if (!entry || now > entry.resetTime) {

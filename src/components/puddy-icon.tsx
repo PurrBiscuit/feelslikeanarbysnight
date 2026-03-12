@@ -33,7 +33,9 @@ export function PuddyIcon({
     }
 
     audioRef.current.currentTime = 0;
-    audioRef.current.play();
+    audioRef.current.play().catch(() => {
+      // Autoplay blocked or audio failed — silently ignore
+    });
   }, [playAudio]);
 
   const svgContent = (

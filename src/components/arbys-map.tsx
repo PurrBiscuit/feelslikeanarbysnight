@@ -46,6 +46,8 @@ function ArbysMarker({ location }: { location: ArbysLocation }) {
 
       {showInfo && (
         <InfoWindow anchor={marker} onClose={handleClose}>
+          {/* InfoWindow renders in Google Maps' own DOM with a white background —
+              theme tokens don't apply here, so we use standard gray/blue colors */}
           <div className="p-2 text-sm">
             <h3 className="font-semibold text-gray-900">{location.name}</h3>
             <p className="text-gray-600 text-xs mt-1">{location.address}</p>

@@ -17,15 +17,18 @@ export function useNearbyArbys(
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const lat = userLocation?.lat;
+  const lng = userLocation?.lng;
+
   const fetchLocations = useCallback(async () => {
-    if (!userLocation) return;
+    if (lat === undefined || lng === undefined) return;
 
     setIsLoading(true);
     setError(null);
 
     try {
       const res = await fetch(
-        `/api/nearby-arbys?lat=${userLocation.lat}&lng=${userLocation.lng}`
+        `/api/nearby-arbys?lat=${lat}&lng=${lng}`
       );
 
       if (!res.ok) {
@@ -44,7 +47,7 @@ export function useNearbyArbys(
     } finally {
       setIsLoading(false);
     }
-  }, [userLocation]);
+  }, [lat, lng]);
 
   useEffect(() => {
     fetchLocations();
