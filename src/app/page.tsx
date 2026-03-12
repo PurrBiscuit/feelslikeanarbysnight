@@ -56,7 +56,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <PuddyIcon size="xs" />
-            <span className="font-display text-lg md:text-xl tracking-wide">
+            <span className="font-display text-sm md:text-xl tracking-wide">
               <span className="text-text-primary">FEELS LIKE AN </span>
               <span className="text-accent-red">ARBY&apos;S</span>
               <span className="text-text-primary"> NIGHT</span>
