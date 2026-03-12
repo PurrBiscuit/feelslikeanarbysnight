@@ -7,6 +7,7 @@ interface LocationCardProps {
   location: ArbysLocation;
   userLocation: { lat: number; lng: number } | null;
   index: number;
+  onSelect: () => void;
 }
 
 function calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
@@ -23,7 +24,7 @@ function calculateDistance(lat1: number, lng1: number, lat2: number, lng2: numbe
   return R * c;
 }
 
-export function LocationCard({ location, userLocation, index }: LocationCardProps) {
+export function LocationCard({ location, userLocation, index, onSelect }: LocationCardProps) {
   const distance = userLocation
     ? calculateDistance(userLocation.lat, userLocation.lng, location.lat, location.lng)
     : null;
@@ -32,7 +33,8 @@ export function LocationCard({ location, userLocation, index }: LocationCardProp
 
   return (
     <Card
-      className="bg-surface border-border hover:bg-surface-elevated transition-colors duration-200 animate-slide-up"
+      className="bg-surface border-border hover:bg-surface-elevated transition-colors duration-200 animate-slide-up cursor-pointer"
+      onClick={onSelect}
       style={{
         animationDelay: `${index * 100}ms`,
         animationFillMode: "both",

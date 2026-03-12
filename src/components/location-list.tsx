@@ -9,6 +9,7 @@ interface LocationListProps {
   isLoading: boolean;
   error: string | null;
   onRetry: () => void;
+  onSelectLocation: (id: string) => void;
 }
 
 function LoadingSkeleton() {
@@ -24,7 +25,7 @@ function LoadingSkeleton() {
   );
 }
 
-export function LocationList({ locations, userLocation, isLoading, error, onRetry }: LocationListProps) {
+export function LocationList({ locations, userLocation, isLoading, error, onRetry, onSelectLocation }: LocationListProps) {
   if (isLoading) {
     return <LoadingSkeleton />;
   }
@@ -61,6 +62,7 @@ export function LocationList({ locations, userLocation, isLoading, error, onRetr
           location={location}
           userLocation={userLocation}
           index={index}
+          onSelect={() => onSelectLocation(location.id)}
         />
       ))}
     </div>

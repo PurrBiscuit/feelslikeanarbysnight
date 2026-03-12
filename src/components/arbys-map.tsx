@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import {
   APIProvider,
   Map,
@@ -15,7 +15,10 @@ import type { ArbysLocation } from "@/lib/google-places";
 interface ArbysMapProps {
   locations: ArbysLocation[];
   userLocation: { lat: number; lng: number } | null;
-  isLoading: boolean;
+  selectedLocationId: string | null;
+  onSelectLocation: (id: string | null) => void;
+  mapRef?: React.RefObject<HTMLDivElement | null>;
+  centerOnSelect?: boolean;
 }
 
 function ArbysMarker({
@@ -102,20 +105,42 @@ function AutoFitBounds({
   return null;
 }
 
-export function ArbysMap({ locations, userLocation, isLoading }: ArbysMapProps) {
+function CenterOnLocation({
+  locations,
+  selectedLocationId,
+  shouldCenter,
+}: {
+  locations: ArbysLocation[];
+  selectedLocationId: string | null;
+  shouldCenter: boolean;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || !selectedLocationId || !shouldCenter) return;
+    const loc = locations.find((l) => l.id === selectedLocationId);
+    if (loc) {
+      map.panTo({ lat: loc.lat, lng: loc.lng });
+      map.setZoom(15);
+    }
+  }, [map, locations, selectedLocationId, shouldCenter]);
+
+  return null;
+}
+
+export function ArbysMap({ locations, userLocation, selectedLocationId, onSelectLocation, mapRef, centerOnSelect }: ArbysMapProps) {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
   const mapId = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID ?? "";
-  const [openMarkerId, setOpenMarkerId] = useState<string | null>(null);
 
   const defaultCenter = userLocation ?? { lat: 39.8283, lng: -98.5795 };
   const defaultZoom = userLocation ? 12 : 4;
 
   const handleMapClick = useCallback(() => {
-    setOpenMarkerId(null);
-  }, []);
+    onSelectLocation(null);
+  }, [onSelectLocation]);
 
   return (
-    <div className="w-full rounded-lg overflow-hidden border border-border">
+    <div ref={mapRef} className="w-full rounded-lg overflow-hidden border border-border">
       <div className="h-[400px] md:h-[500px]">
         <APIProvider apiKey={apiKey}>
           <Map
@@ -127,6 +152,7 @@ export function ArbysMap({ locations, userLocation, isLoading }: ArbysMapProps) 
             onClick={handleMapClick}
           >
             <AutoFitBounds locations={locations} userLocation={userLocation} />
+            <CenterOnLocation locations={locations} selectedLocationId={selectedLocationId} shouldCenter={centerOnSelect ?? false} />
 
             {/* User location marker */}
             {userLocation && (
@@ -140,9 +166,9 @@ export function ArbysMap({ locations, userLocation, isLoading }: ArbysMapProps) 
               <ArbysMarker
                 key={location.id}
                 location={location}
-                isOpen={openMarkerId === location.id}
-                onOpen={() => setOpenMarkerId(location.id)}
-                onClose={() => setOpenMarkerId(null)}
+                isOpen={selectedLocationId === location.id}
+                onOpen={() => onSelectLocation(location.id)}
+                onClose={() => onSelectLocation(null)}
               />
             ))}
           </Map>

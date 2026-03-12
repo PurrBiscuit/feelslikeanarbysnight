@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef, useCallback } from "react";
 import { PuddyIcon } from "@/components/puddy-icon";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ArbysMap } from "@/components/arbys-map";
@@ -16,6 +17,22 @@ export default function Home() {
     error: arbysError,
     refetch,
   } = useNearbyArbys(userLocation);
+  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
+  const [centerOnSelect, setCenterOnSelect] = useState(false);
+  const mapRef = useRef<HTMLDivElement>(null);
+
+  const handleSelectLocation = useCallback((id: string | null) => {
+    setCenterOnSelect(false);
+    setSelectedLocationId(id);
+  }, []);
+
+  const handleCardSelect = useCallback((id: string) => {
+    setCenterOnSelect(true);
+    setSelectedLocationId(id);
+    if (mapRef.current) {
+      mapRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -76,7 +93,10 @@ export default function Home() {
         <ArbysMap
           locations={locations}
           userLocation={userLocation}
-          isLoading={isLoading}
+          selectedLocationId={selectedLocationId}
+          onSelectLocation={handleSelectLocation}
+          mapRef={mapRef}
+          centerOnSelect={centerOnSelect}
         />
 
         <p className="text-text-secondary text-sm md:text-base text-center">
@@ -96,6 +116,7 @@ export default function Home() {
             isLoading={isLoading}
             error={arbysError}
             onRetry={refetch}
+            onSelectLocation={handleCardSelect}
           />
         )}
       </main>

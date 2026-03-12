@@ -56,7 +56,7 @@ export function PuddyIcon({
         className={cn(
           "cursor-pointer transition-transform duration-200",
           "hover:scale-105 active:scale-95",
-          "focus:outline-none focus:ring-2 focus:ring-accent-red focus:ring-offset-2 focus:ring-offset-background",
+          "focus:outline-none",
           size === "lg" && "animate-puddy-glow",
           className
         )}

@@ -32,7 +32,7 @@ export async function searchNearbyArbys(
     },
     body: JSON.stringify({
       textQuery: "Arby's restaurant",
-      maxResultCount: 20,
+      maxResultCount: 10,
       locationBias: {
         circle: {
           center: { latitude: lat, longitude: lng },
