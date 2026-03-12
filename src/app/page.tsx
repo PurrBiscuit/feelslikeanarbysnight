@@ -68,7 +68,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="text-center py-12 md:py-16 px-4">
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-6 max-w-[250px] md:max-w-none mx-auto">
           <PuddyIcon size="lg" playAudio />
         </div>
         <h1 className="font-display text-4xl md:text-6xl tracking-wide">
