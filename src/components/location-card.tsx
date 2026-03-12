@@ -33,7 +33,7 @@ export function LocationCard({ location, userLocation, index, onSelect }: Locati
 
   return (
     <Card
-      className="bg-surface border-border hover:bg-surface-elevated transition-colors duration-200 animate-slide-up cursor-pointer"
+      className="bg-surface border-border hover:bg-surface-elevated transition-colors duration-200 animate-slide-up cursor-pointer shadow-md"
       onClick={onSelect}
       style={{
         animationDelay: `${index * 100}ms`,

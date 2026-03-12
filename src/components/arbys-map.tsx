@@ -140,7 +140,7 @@ export function ArbysMap({ locations, userLocation, selectedLocationId, onSelect
   }, [onSelectLocation]);
 
   return (
-    <div ref={mapRef} className="w-full rounded-lg overflow-hidden border border-border">
+    <div ref={mapRef} className="w-full rounded-lg overflow-hidden border border-border shadow-lg">
       <div className="h-[400px] md:h-[500px]">
         <APIProvider apiKey={apiKey}>
           <Map
