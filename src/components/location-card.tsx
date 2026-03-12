@@ -38,10 +38,12 @@ export function LocationCard({ location, userLocation, index }: LocationCardProp
         animationFillMode: "both",
       }}
     >
-      <CardContent className="flex items-center justify-between p-4">
+      <CardContent className="flex items-center justify-between px-4 py-2">
         <div>
-          <h3 className="font-semibold text-text-primary text-sm">{location.name}</h3>
-          <p className="text-text-secondary text-xs mt-1">
+          {location.address && (
+            <h3 className="font-semibold text-text-primary text-sm">{location.address}</h3>
+          )}
+          <p className="text-text-secondary text-sm mt-0.5">
             {distance !== null && <span>{distance.toFixed(1)} mi · </span>}
             {location.openNow !== undefined && (
               <span className={location.openNow ? "text-green-500" : "text-red-500"}>
@@ -50,13 +52,8 @@ export function LocationCard({ location, userLocation, index }: LocationCardProp
             )}
           </p>
           {location.hours && location.hours.length > 0 && (
-            <p className="text-text-secondary text-xs mt-0.5 truncate max-w-[250px]">
+            <p className="text-text-secondary text-sm mt-0.5 truncate max-w-[300px]">
               {location.hours[(new Date().getDay() + 6) % 7]}
-            </p>
-          )}
-          {location.address && (
-            <p className="text-text-secondary text-xs mt-0.5 truncate max-w-[250px]">
-              {location.address}
             </p>
           )}
         </div>

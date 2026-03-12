@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import {
   APIProvider,
   Map,
   AdvancedMarker,
   InfoWindow,
   useAdvancedMarkerRef,
+  useMap,
 } from "@vis.gl/react-google-maps";
 import Image from "next/image";
 import type { ArbysLocation } from "@/lib/google-places";
@@ -17,17 +18,18 @@ interface ArbysMapProps {
   isLoading: boolean;
 }
 
-function ArbysMarker({ location }: { location: ArbysLocation }) {
+function ArbysMarker({
+  location,
+  isOpen,
+  onOpen,
+  onClose,
+}: {
+  location: ArbysLocation;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}) {
   const [markerRef, marker] = useAdvancedMarkerRef();
-  const [showInfo, setShowInfo] = useState(false);
-
-  const handleClick = useCallback(() => {
-    setShowInfo((prev) => !prev);
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setShowInfo(false);
-  }, []);
 
   const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}`;
 
@@ -36,7 +38,7 @@ function ArbysMarker({ location }: { location: ArbysLocation }) {
       <AdvancedMarker
         ref={markerRef}
         position={{ lat: location.lat, lng: location.lng }}
-        onClick={handleClick}
+        onClick={onOpen}
         title={location.name}
       >
         <div className="animate-fade-in-bounce">
@@ -44,10 +46,8 @@ function ArbysMarker({ location }: { location: ArbysLocation }) {
         </div>
       </AdvancedMarker>
 
-      {showInfo && (
-        <InfoWindow anchor={marker} onClose={handleClose}>
-          {/* InfoWindow renders in Google Maps' own DOM with a white background —
-              theme tokens don't apply here, so we use standard gray/blue colors */}
+      {isOpen && (
+        <InfoWindow anchor={marker} onClose={onClose} onCloseClick={onClose} headerDisabled shouldFocus={false}>
           <div className="p-2 text-sm">
             <h3 className="font-semibold text-gray-900">{location.name}</h3>
             <p className="text-gray-600 text-xs mt-1">{location.address}</p>
@@ -71,28 +71,51 @@ function ArbysMarker({ location }: { location: ArbysLocation }) {
   );
 }
 
+function AutoFitBounds({
+  locations,
+  userLocation,
+}: {
+  locations: ArbysLocation[];
+  userLocation: { lat: number; lng: number } | null;
+}) {
+  const map = useMap();
+  const hasFitted = useRef(false);
+
+  useEffect(() => {
+    if (!map || locations.length === 0 || hasFitted.current) return;
+
+    const top3 = locations.slice(0, 3);
+    const bounds = new google.maps.LatLngBounds();
+
+    if (userLocation) {
+      bounds.extend(userLocation);
+    }
+
+    for (const loc of top3) {
+      bounds.extend({ lat: loc.lat, lng: loc.lng });
+    }
+
+    map.fitBounds(bounds, 50);
+    hasFitted.current = true;
+  }, [map, locations, userLocation]);
+
+  return null;
+}
+
 export function ArbysMap({ locations, userLocation, isLoading }: ArbysMapProps) {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
   const mapId = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID ?? "";
+  const [openMarkerId, setOpenMarkerId] = useState<string | null>(null);
 
   const defaultCenter = userLocation ?? { lat: 39.8283, lng: -98.5795 };
   const defaultZoom = userLocation ? 12 : 4;
 
+  const handleMapClick = useCallback(() => {
+    setOpenMarkerId(null);
+  }, []);
+
   return (
     <div className="w-full rounded-lg overflow-hidden border border-border">
-      {/* Map header */}
-      <div className="flex justify-between items-center px-4 py-2 bg-surface-elevated border-b border-border">
-        <span className="font-semibold text-text-primary text-sm">
-          Nearby Arby&apos;s
-        </span>
-        <span className="text-text-secondary text-xs">
-          {isLoading
-            ? "Searching..."
-            : `${locations.length} location${locations.length !== 1 ? "s" : ""} found`}
-        </span>
-      </div>
-
-      {/* Map - dark/light styling handled via Cloud-based Map Styling using the Map ID in Google Cloud Console */}
       <div className="h-[400px] md:h-[500px]">
         <APIProvider apiKey={apiKey}>
           <Map
@@ -101,7 +124,10 @@ export function ArbysMap({ locations, userLocation, isLoading }: ArbysMapProps) 
             mapId={mapId}
             gestureHandling="greedy"
             disableDefaultUI={false}
+            onClick={handleMapClick}
           >
+            <AutoFitBounds locations={locations} userLocation={userLocation} />
+
             {/* User location marker */}
             {userLocation && (
               <AdvancedMarker position={userLocation}>
@@ -111,7 +137,13 @@ export function ArbysMap({ locations, userLocation, isLoading }: ArbysMapProps) 
 
             {/* Arby's markers */}
             {locations.map((location) => (
-              <ArbysMarker key={location.id} location={location} />
+              <ArbysMarker
+                key={location.id}
+                location={location}
+                isOpen={openMarkerId === location.id}
+                onOpen={() => setOpenMarkerId(location.id)}
+                onClose={() => setOpenMarkerId(null)}
+              />
             ))}
           </Map>
         </APIProvider>
