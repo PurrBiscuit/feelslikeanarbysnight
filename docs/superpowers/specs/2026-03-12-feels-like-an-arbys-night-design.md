@@ -26,7 +26,7 @@ Browser (client)
   │
 Next.js API Route (/api/nearby-arbys)
   ├── Receives lat/lng
-  ├── Calls Google Places API (nearbySearch, keyword: "Arby's")
+  ├── Calls Google Places API (nearbySearch, keyword: "Arby's", radius: 16093m / ~10 miles)
   ├── Returns JSON array of locations
   │
 Google Maps Platform
@@ -114,7 +114,7 @@ theme: {
 ## Typography
 
 - **Body:** Inter (clean, modern)
-- **Display/Title:** Bebas Neue or Oswald (bold condensed, retro 90s Seinfeld-era feel)
+- **Display/Title:** Bebas Neue (bold condensed, retro 90s Seinfeld-era feel)
 
 ## Animations
 
@@ -129,7 +129,7 @@ theme: {
 |-----------|-------------|
 | `PuddyIcon` | Custom SVG component. Three sizes: `lg` (hero), `sm` (map marker), `xs` (nav). Hero version has hover glow + click handler for audio playback. |
 | `ThemeToggle` | ShadCN Switch/Toggle in the nav. Toggles `dark`/`light` class on `<html>`. Persists preference to `localStorage`. |
-| `ArbysMap` | Wraps `@react-google-maps/api`. Renders Google Map with dark/light styled map JSON. Custom markers using `PuddyIcon` sm. Info windows on marker click showing restaurant name + directions link. |
+| `ArbysMap` | Wraps `@react-google-maps/api`. Renders Google Map with dark/light styled map JSON. Custom markers using `AdvancedMarkerElement` with `PuddyIcon` sm rendered as inline SVG. Info windows on marker click showing restaurant name + directions link. |
 | `LocationCard` | ShadCN Card variant. Shows restaurant name, distance, hours, "Directions" link (opens Google Maps in new tab). Staggered slide-up animation on load. |
 | `LocationList` | Container for `LocationCard` components. Shows loading skeleton while API call is in flight. |
 | `LocationPermission` | Handles the browser geolocation flow. Shows a friendly message if permission is denied. |
@@ -149,6 +149,23 @@ theme: {
 - **API failure:** "Couldn't find nearby Arby's. Try again?" with retry button
 - **No results:** "No Arby's found nearby. Puddy would not be pleased."
 - **Location denied:** Friendly message explaining location is needed to find nearby restaurants
+
+## API Rate Limiting
+
+The `/api/nearby-arbys` route applies basic rate limiting: max 60 requests per minute per IP using an in-memory store. This prevents accidental cost spikes from the Google Places API. Sufficient for a hobby project; no external rate-limiting service needed.
+
+## Accessibility
+
+- Puddy SVG includes `role="img"` and `aria-label` describing the character
+- Hero Puddy icon has `role="button"` and `aria-label="Play audio clip"`
+- Map markers are supplemented by the location card list below (keyboard-accessible)
+- Location cards are focusable with keyboard navigation
+- Theme toggle is a labeled ShadCN switch with proper ARIA attributes
+- Color contrast ratios meet WCAG AA for all text/background token pairs
+
+## Audio Clip
+
+The `puddy-audio.mp3` is a short clip from the Seinfeld TV show. This is a personal hobby project, not a commercial product. The user will source the audio file themselves and place it in `public/`.
 
 ## Environment Variables
 
