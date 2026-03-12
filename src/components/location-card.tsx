@@ -32,7 +32,7 @@ export function LocationCard({ location, userLocation, index }: LocationCardProp
 
   return (
     <Card
-      className="bg-surface border-border hover:bg-surface-elevated transition-colors duration-200"
+      className="bg-surface border-border hover:bg-surface-elevated transition-colors duration-200 animate-slide-up"
       style={{
         animationDelay: `${index * 100}ms`,
         animationFillMode: "both",

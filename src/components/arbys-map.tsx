@@ -39,7 +39,9 @@ function ArbysMarker({ location }: { location: ArbysLocation }) {
         onClick={handleClick}
         title={location.name}
       >
-        <PuddyIcon size="sm" />
+        <div className="animate-fade-in-bounce">
+          <PuddyIcon size="sm" />
+        </div>
       </AdvancedMarker>
 
       {showInfo && (

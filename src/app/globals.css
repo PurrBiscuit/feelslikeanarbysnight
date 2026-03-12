@@ -57,6 +57,8 @@
   --font-display: "Bebas Neue", sans-serif;
   --font-body: var(--font-sans);
   --animate-puddy-glow: puddy-glow 3s ease-in-out infinite;
+  --animate-slide-up: slide-up 0.4s ease-out;
+  --animate-fade-in-bounce: fade-in-bounce 0.5s ease-out;
 }
 
 :root {
@@ -126,6 +128,17 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+@keyframes slide-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-bounce {
+  0% { opacity: 0; transform: scale(0.5); }
+  60% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 @keyframes puddy-glow {

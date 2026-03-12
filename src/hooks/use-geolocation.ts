@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface GeolocationState {
   location: { lat: number; lng: number } | null;
@@ -14,13 +14,19 @@ export function useGeolocation(): GeolocationState {
     error: null,
     loading: true,
   });
+  const hasRun = useRef(false);
 
   useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
+
     if (!navigator.geolocation) {
-      setState({
-        location: null,
-        error: "Geolocation is not supported by your browser.",
-        loading: false,
+      queueMicrotask(() => {
+        setState({
+          location: null,
+          error: "Geolocation is not supported by your browser.",
+          loading: false,
+        });
       });
       return;
     }
