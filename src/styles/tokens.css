@@ -1,0 +1,25 @@
+/* src/styles/tokens.css */
+
+/* Light mode (default) */
+:root {
+  --surface: #ffffff;
+  --surface-elevated: #f5f4f2;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --accent-red: #c41e3a;
+  --accent-red-dark: #8b0000;
+  --accent-warm: #b8784f;
+  --user-location: #2563eb;
+}
+
+/* Dark mode */
+.dark {
+  --surface: #1a1a1a;
+  --surface-elevated: #2a2a2a;
+  --text-primary: #ffffff;
+  --text-secondary: #888888;
+  --accent-red: #c41e3a;
+  --accent-red-dark: #8b0000;
+  --accent-warm: #d4956a;
+  --user-location: #4a90d9;
+}
