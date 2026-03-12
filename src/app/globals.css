@@ -56,6 +56,7 @@
   --color-user-location: var(--user-location);
   --font-display: "Bebas Neue", sans-serif;
   --font-body: var(--font-sans);
+  --animate-puddy-glow: puddy-glow 3s ease-in-out infinite;
 }
 
 :root {
@@ -125,6 +126,15 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+@keyframes puddy-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(196, 30, 58, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(196, 30, 58, 0.6));
+  }
 }
 
 @layer base {

@@ -1,4 +1,5 @@
 import { ThemeToggle } from "@/components/theme-toggle";
+import { PuddyIcon } from "@/components/puddy-icon";
 
 export default function Home() {
   return (
@@ -6,10 +7,11 @@ export default function Home() {
       <div className="flex justify-end">
         <ThemeToggle />
       </div>
-      <h1 className="text-accent-red text-4xl font-display mt-4">
-        FEELS LIKE AN ARBY&apos;S NIGHT
-      </h1>
-      <p className="text-text-secondary">Toggle dark/light mode above</p>
+      <div className="flex flex-col items-center gap-8 mt-8">
+        <PuddyIcon size="lg" playAudio />
+        <PuddyIcon size="sm" />
+        <PuddyIcon size="xs" />
+      </div>
     </div>
   );
 }
