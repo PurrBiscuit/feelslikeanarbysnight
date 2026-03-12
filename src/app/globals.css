@@ -59,6 +59,9 @@
   --animate-puddy-glow: puddy-glow 3s ease-in-out infinite;
   --animate-slide-up: slide-up 0.4s ease-out;
   --animate-fade-in-bounce: fade-in-bounce 0.5s ease-out;
+  --animate-jiggle: jiggle 0.4s ease-in-out;
+  --animate-agitated-shake: agitated-shake 0.15s ease-in-out infinite;
+  --animate-puddy-glow-intense: puddy-glow-intense 0.5s ease-in-out infinite;
 }
 
 :root {
@@ -139,6 +142,32 @@
   0% { opacity: 0; transform: scale(0.5); }
   60% { opacity: 1; transform: scale(1.1); }
   100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes puddy-glow-intense {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(196, 30, 58, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 40px rgba(196, 30, 58, 0.9));
+  }
+}
+
+@keyframes agitated-shake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(-3px, 2px) rotate(-2deg); }
+  40% { transform: translate(3px, -2px) rotate(2deg); }
+  60% { transform: translate(-2px, -1px) rotate(-1deg); }
+  80% { transform: translate(2px, 1px) rotate(1deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes jiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(8deg); }
+  60% { transform: rotate(-4deg); }
+  80% { transform: rotate(4deg); }
 }
 
 @keyframes puddy-glow {

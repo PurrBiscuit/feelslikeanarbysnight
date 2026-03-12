@@ -20,19 +20,30 @@ export default function Home() {
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
   const [centerOnSelect, setCenterOnSelect] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const playAudio = useCallback(() => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio("/puddy-audio.mp3");
+    }
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().catch(() => {});
+  }, []);
 
   const handleSelectLocation = useCallback((id: string | null) => {
     setCenterOnSelect(false);
     setSelectedLocationId(id);
-  }, []);
+    if (id) playAudio();
+  }, [playAudio]);
 
   const handleCardSelect = useCallback((id: string) => {
     setCenterOnSelect(true);
     setSelectedLocationId(id);
+    playAudio();
     if (mapRef.current) {
       mapRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  }, []);
+  }, [playAudio]);
 
   return (
     <div className="min-h-screen bg-background">

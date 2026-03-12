@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -24,18 +24,21 @@ export function PuddyIcon({
   playAudio = false,
 }: PuddyIconProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isShaking, setIsShaking] = useState(false);
   const { src, width, height } = sizeMap[size];
 
   const handleClick = useCallback(() => {
     if (!playAudio) return;
 
     if (!audioRef.current) {
-      audioRef.current = new Audio("/puddy-audio.mp3");
+      audioRef.current = new Audio("/were-the-devils.mp3");
+      audioRef.current.addEventListener("ended", () => setIsShaking(false));
     }
 
     audioRef.current.currentTime = 0;
+    setIsShaking(true);
     audioRef.current.play().catch(() => {
-      // Autoplay blocked or audio failed — silently ignore
+      setIsShaking(false);
     });
   }, [playAudio]);
 
@@ -53,15 +56,17 @@ export function PuddyIcon({
     return (
       <button
         onClick={handleClick}
+        disabled={isShaking}
         className={cn(
-          "cursor-pointer transition-transform duration-200",
-          "hover:scale-105 active:scale-95",
-          "focus:outline-none",
-          size === "lg" && "animate-puddy-glow",
+          "transition-transform duration-200 focus:outline-none",
+          isShaking
+            ? "scale-110 cursor-default"
+            : "cursor-pointer hover:scale-[0.98]",
+          size === "lg" && !isShaking && "animate-puddy-glow",
           className
         )}
-        role="button"
-        aria-label="Play audio clip: Feels like an Arby's night"
+        style={isShaking ? { animation: "agitated-shake 0.15s ease-in-out infinite, puddy-glow-intense 1s ease-in-out infinite" } : undefined}
+        aria-label="Play audio clip: We're the Devils"
       >
         {imageContent}
       </button>

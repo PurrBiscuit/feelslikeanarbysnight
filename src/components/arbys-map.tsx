@@ -44,7 +44,7 @@ function ArbysMarker({
         onClick={onOpen}
         title={location.name}
       >
-        <div className="animate-fade-in-bounce">
+        <div className="hover:animate-jiggle">
           <Image src="/arbys-marker.png" alt="Arby's" width={46} height={40} />
         </div>
       </AdvancedMarker>
