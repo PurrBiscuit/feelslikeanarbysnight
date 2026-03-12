@@ -8,7 +8,7 @@ import {
   InfoWindow,
   useAdvancedMarkerRef,
 } from "@vis.gl/react-google-maps";
-import { PuddyIcon } from "@/components/puddy-icon";
+import Image from "next/image";
 import type { ArbysLocation } from "@/lib/google-places";
 
 interface ArbysMapProps {
@@ -40,7 +40,7 @@ function ArbysMarker({ location }: { location: ArbysLocation }) {
         title={location.name}
       >
         <div className="animate-fade-in-bounce">
-          <PuddyIcon size="sm" />
+          <Image src="/arbys-marker.png" alt="Arby's" width={46} height={40} />
         </div>
       </AdvancedMarker>
 

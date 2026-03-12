@@ -22,7 +22,14 @@ export default function Home() {
       {/* Nav Bar */}
       <nav className="sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b-2 border-accent-red">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <PuddyIcon size="xs" />
+          <div className="flex items-center gap-3">
+            <PuddyIcon size="xs" />
+            <h1 className="font-display text-lg md:text-xl tracking-wide">
+              <span className="text-text-primary">FEELS LIKE AN </span>
+              <span className="text-accent-red">ARBY&apos;S</span>
+              <span className="text-text-primary"> NIGHT</span>
+            </h1>
+          </div>
           <ThemeToggle />
         </div>
       </nav>
@@ -32,11 +39,6 @@ export default function Home() {
         <div className="flex justify-center mb-6">
           <PuddyIcon size="lg" playAudio />
         </div>
-        <h1 className="font-display text-4xl md:text-6xl tracking-wide">
-          <span className="text-text-primary">FEELS LIKE AN </span>
-          <span className="text-accent-red">ARBY&apos;S</span>
-          <span className="text-text-primary"> NIGHT</span>
-        </h1>
         <p className="text-text-secondary mt-3 text-sm md:text-base">
           Find your nearest Arby&apos;s. Yeah, that&apos;s right.
         </p>
