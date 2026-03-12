@@ -29,7 +29,7 @@ export function PuddyIcon({
 
   useEffect(() => {
     if (!playAudio) return;
-    const audio = new Audio("/were-the-devils.mp3");
+    const audio = new Audio("/were_the_devils_clean.mp3");
     audio.preload = "auto";
     audio.addEventListener("ended", () => setIsShaking(false));
     audioRef.current = audio;

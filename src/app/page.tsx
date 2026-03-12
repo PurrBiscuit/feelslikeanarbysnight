@@ -23,7 +23,7 @@ export default function Home() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const audio = new Audio("/puddy-audio.mp3");
+    const audio = new Audio("/puddy_audio_clean.mp3");
     audio.preload = "auto";
     audioRef.current = audio;
   }, []);
